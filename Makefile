@@ -5,10 +5,14 @@ SRC_DIR  =	src
 OBJ_DIR  =	obj
 
 NAME	 =	abstract-vm
-SRC		 =
+SRC		 =	main.cpp				\
+			Token.cpp
 OBJ		 =	$(addprefix $(OBJ_DIR)/, $(SRC:%.cpp=%.o))
 
-vpath %.cpp $(SRC_DIR)
+SRC_SUB_DIR =	$(SRC_DIR)				\
+				$(SRC_DIR)/lexer
+
+vpath %.cpp $(SRC_SUB_DIR)
 
 all: $(NAME)
 
