@@ -6,7 +6,7 @@
 /*   By: lgreau <lgreau@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 14:23:38 by lgreau            #+#    #+#             */
-/*   Updated: 2024/06/26 14:45:39 by lgreau           ###   ########.fr       */
+/*   Updated: 2024/06/26 15:03:12 by lgreau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,49 +17,60 @@ Parser::Parser(const std::vector<Token> &tokens) : _tokens(tokens), _pos(0) {}
 std::unique_ptr<ProgramNode>	Parser::parse() {
 	auto	program = std::make_unique<ProgramNode>();
 
-	while (!isAtEnd()) {
+	while (currentToken().type != TokenType::END) {
 		program->addInstruction(parseInstruction());
-		consume(TokenType::NEWLINE);
 	}
 	return program;
 }
 
 
 
-bool	Parser::isAtEnd() const {
-	return this->_pos >= this->_tokens.size() || this->_tokens[this->_pos].type == TokenType::END_OF_FILE;
-}
 
 const Token &Parser::currentToken() const {
-	return this->_tokens[this->_pos];
+	if (this->_pos < this->_tokens.size()) {
+		return this->_tokens[this->_pos];
+	}
+	throw std::runtime_error("No more tokens available");
 }
 
-const Token &Parser::consume(TokenType type) {
-	if (currentToken().type == type) {
-		return this->_tokens[this->_pos++];
+void	Parser::consumeToken() {
+	if (this->_pos < this->_tokens.size()) {
+		this->_pos++;
+	} else {
+		throw std::runtime_error("Attempted to consume token past the end");
 	}
-	throw std::runtime_error("Unexpected token: " + currentToken().value);
 }
 
 std::unique_ptr<InstructionNode>	Parser::parseInstruction() {
-	auto					instrToken = consume(currentToken().type);
-	std::optional<Token>	valueToken;
+	Token instrToken = currentToken();
+	consumeToken();
 
+	std::optional<Token>	valueToken = std::nullopt;
 	if (instrToken.type == TokenType::PUSH || instrToken.type == TokenType::ASSERT) {
-		valueToken = consume(nextTokenType());
+		valueToken = parseValue();
 	}
 
 	return std::make_unique<InstructionNode>(instrToken, valueToken);
 }
 
-TokenType	Parser::nextTokenType() const {
-	if (currentToken().type == TokenType::INT8 || currentToken().type == TokenType::INT16 ||
-		currentToken().type == TokenType::INT32 || currentToken().type == TokenType::FLOAT ||
-		currentToken().type == TokenType::DOUBLE) {
-		return currentToken().type;
-	} else if (currentToken().type == TokenType::INTEGER || currentToken().type == TokenType::FLOATING) {
-		return currentToken().type;
+Token	Parser::parseValue() {
+	Token typeToken = currentToken();
+	consumeToken();
+
+	Token valueToken = currentToken();
+	consumeToken();
+
+	// Combine type and value into a single token
+	std::string combinedValue = typeToken.value + "(" + valueToken.value + ")";
+	TokenType combinedType;
+
+	if (typeToken.type == TokenType::INT8 || typeToken.type == TokenType::INT16 || typeToken.type == TokenType::INT32) {
+		combinedType = TokenType::VALUE;
+	} else if (typeToken.type == TokenType::FLOAT || typeToken.type == TokenType::DOUBLE) {
+		combinedType = TokenType::VALUE;
 	} else {
 		throw std::runtime_error("Expected a value type token");
 	}
+
+	return Token(combinedType, combinedValue);
 }

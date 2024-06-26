@@ -6,7 +6,7 @@
 /*   By: lgreau <lgreau@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 13:47:04 by lgreau            #+#    #+#             */
-/*   Updated: 2024/06/26 14:01:16 by lgreau           ###   ########.fr       */
+/*   Updated: 2024/06/26 14:54:22 by lgreau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,26 +16,41 @@ Lexer::Lexer(const std::string &input) : _input(input), _pos(0), _length(input.l
 
 
 std::vector<Token> Lexer::tokenize() {
-	std::vector<Token>	tokens;
+	std::vector<Token> tokens;
+		std::string::const_iterator it = this->_input.begin();
 
-	while (this->_pos < this->_length) {
-		if (isspace(currentChar())) {
-			consume();
-		} else if (currentChar() == ';') {
-			skipComment();
-		} else if (isalpha(currentChar())) {
-			tokens.push_back(matchKeywordOrValueType());
-		} else if (isdigit(currentChar()) || currentChar() == '-' || currentChar() == '.') {
-			tokens.push_back(matchNumber());
-		} else if (currentChar() == '\n') {
-			tokens.emplace_back(TokenType::NEWLINE, "\n");
-			consume();
-		} else {
-			consume();  // Skip unknown characters
+		while (it != this->_input.end()) {
+			if (std::isspace(*it)) {
+				++it;
+				continue;
+			}
+
+			if (*it == ';') {
+				while (it != this->_input.end() && *it != '\n') ++it;  // Skip comments
+				continue;
+			}
+
+			if (std::isdigit(*it) || (*it == '-' && std::isdigit(*(it + 1)))) {
+				tokens.push_back(parseNumber(it));
+				continue;
+			}
+
+			if (std::isalpha(*it)) {
+				tokens.push_back(parseIdentifier(it));
+				continue;
+			}
+
+			if (*it == '(' || *it == ')') {
+				tokens.push_back(Token(TokenType::VALUE, std::string(1, *it)));
+				++it;
+				continue;
+			}
+
+			throw std::runtime_error("Unexpected character: " + std::string(1, *it));
 		}
-	}
-	tokens.emplace_back(TokenType::END_OF_FILE, "");
-	return tokens;
+
+		tokens.push_back(Token(TokenType::END, "#"));
+		return tokens;
 }
 
 
@@ -53,50 +68,40 @@ void Lexer::skipComment() {
 	}
 }
 
+Token	Lexer::parseNumber(std::string::const_iterator& it) {
+	std::string	number;
 
-Token Lexer::matchKeywordOrValueType() {
-	std::string	value;
-
-	while (isalpha(currentChar())) {
-		value += currentChar();
-		consume();
+	while (it != this->_input.end() && (std::isdigit(*it) || *it == '.' || *it == '-')) {
+		number += *it;
+		++it;
 	}
-	if (value == "push") return Token(TokenType::PUSH, value);
-	if (value == "pop") return Token(TokenType::POP, value);
-	if (value == "dump") return Token(TokenType::DUMP, value);
-	if (value == "assert") return Token(TokenType::ASSERT, value);
-	if (value == "add") return Token(TokenType::ADD, value);
-	if (value == "sub") return Token(TokenType::SUB, value);
-	if (value == "mul") return Token(TokenType::MUL, value);
-	if (value == "div") return Token(TokenType::DIV, value);
-	if (value == "mod") return Token(TokenType::MOD, value);
-	if (value == "print") return Token(TokenType::PRINT, value);
-	if (value == "exit") return Token(TokenType::EXIT, value);
-	if (value == "int8") return Token(TokenType::INT8, value);
-	if (value == "int16") return Token(TokenType::INT16, value);
-	if (value == "int32") return Token(TokenType::INT32, value);
-	if (value == "float") return Token(TokenType::FLOAT, value);
-	if (value == "double") return Token(TokenType::DOUBLE, value);
-	return Token(TokenType::UNKNOWN, value);
+	return Token(TokenType::VALUE, number);
 }
 
+Token	Lexer::parseIdentifier(std::string::const_iterator& it) {
+	std::string	identifier;
 
-Token Lexer::matchNumber() {
-	std::string	value;
-	bool		hasDot = false;
+	while (it != this->_input.end() && std::isalnum(*it)) {
+		identifier += *it;
+		++it;
+	}
 
-	if (currentChar() == '-') {
-		value += currentChar();
-		consume();
-	}
-	while (isdigit(currentChar()) || (!hasDot && currentChar() == '.')) {
-		if (currentChar() == '.') hasDot = true;
-		value += currentChar();
-		consume();
-	}
-	if (hasDot) {
-		return Token(TokenType::FLOATING, value);
-	} else {
-		return Token(TokenType::INTEGER, value);
-	}
+	if (identifier == "push") return Token(TokenType::PUSH, identifier);
+	if (identifier == "pop") return Token(TokenType::POP, identifier);
+	if (identifier == "dump") return Token(TokenType::DUMP, identifier);
+	if (identifier == "assert") return Token(TokenType::ASSERT, identifier);
+	if (identifier == "add") return Token(TokenType::ADD, identifier);
+	if (identifier == "sub") return Token(TokenType::SUB, identifier);
+	if (identifier == "mul") return Token(TokenType::MUL, identifier);
+	if (identifier == "div") return Token(TokenType::DIV, identifier);
+	if (identifier == "mod") return Token(TokenType::MOD, identifier);
+	if (identifier == "print") return Token(TokenType::PRINT, identifier);
+	if (identifier == "exit") return Token(TokenType::EXIT, identifier);
+	if (identifier == "int8") return Token(TokenType::INT8, identifier);
+	if (identifier == "int16") return Token(TokenType::INT16, identifier);
+	if (identifier == "int32") return Token(TokenType::INT32, identifier);
+	if (identifier == "float") return Token(TokenType::FLOAT, identifier);
+	if (identifier == "double") return Token(TokenType::DOUBLE, identifier);
+
+	return Token(TokenType::UNKNOWN, identifier);
 }

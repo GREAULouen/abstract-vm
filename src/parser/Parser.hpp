@@ -6,7 +6,7 @@
 /*   By: lgreau <lgreau@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 14:15:04 by lgreau            #+#    #+#             */
-/*   Updated: 2024/06/26 14:41:40 by lgreau           ###   ########.fr       */
+/*   Updated: 2024/06/26 15:03:09 by lgreau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,13 @@ class Parser {
 		Parser(Parser const &);
 		Parser &	operator=(Parser const &);
 
-		std::vector<Token>	_tokens;
-		size_t				_pos;
+		const std::vector<Token>&	_tokens;
+		size_t						_pos;
 
-		bool								isAtEnd() const;
 		const Token &						currentToken() const;
-		const Token &						consume(TokenType type);
+		void								consumeToken();
 		std::unique_ptr<InstructionNode>	parseInstruction();
-		TokenType							nextTokenType() const;
+		Token								parseValue();
 
 	public:
 		Parser(const std::vector<Token> &tokens);

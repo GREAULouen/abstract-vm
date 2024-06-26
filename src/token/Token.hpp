@@ -6,7 +6,7 @@
 /*   By: lgreau <lgreau@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 13:36:01 by lgreau            #+#    #+#             */
-/*   Updated: 2024/06/26 13:55:31 by lgreau           ###   ########.fr       */
+/*   Updated: 2024/06/26 14:52:52 by lgreau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,7 @@
 
 enum class TokenType {
 	PUSH, POP, DUMP, ASSERT, ADD, SUB, MUL, DIV, MOD, PRINT, EXIT,
-	INT8, INT16, INT32, FLOAT, DOUBLE,
-	INTEGER, FLOATING, NEWLINE, COMMENT, END_OF_FILE, UNKNOWN
+	INT8, INT16, INT32, FLOAT, DOUBLE, VALUE, COMMENT, SEP, END, UNKNOWN
 };
 
 class Token {

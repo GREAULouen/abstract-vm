@@ -6,7 +6,7 @@
 /*   By: lgreau <lgreau@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 13:47:00 by lgreau            #+#    #+#             */
-/*   Updated: 2024/06/26 13:55:50 by lgreau           ###   ########.fr       */
+/*   Updated: 2024/06/26 14:52:31 by lgreau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@ class Lexer {
 		char	currentChar() const;
 		void	consume();
 		void	skipComment();
-		Token	matchKeywordOrValueType();
-		Token	matchNumber();
+		Token	parseNumber(std::string::const_iterator& it);
+		Token	parseIdentifier(std::string::const_iterator& it);
 
 	public:
 		Lexer(const std::string &input);
