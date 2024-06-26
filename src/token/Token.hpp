@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Lexer.hpp                                          :+:      :+:    :+:   */
+/*   Token.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lgreau <lgreau@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 13:36:01 by lgreau            #+#    #+#             */
-/*   Updated: 2024/06/26 13:37:30 by lgreau           ###   ########.fr       */
+/*   Updated: 2024/06/26 13:55:31 by lgreau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
-#ifndef LEXER_HPP
-# define LEXER_HPP
+#ifndef TOKEN_HPP
+# define TOKEN_HPP
 
 # include <string>
 
@@ -36,4 +36,4 @@ class Token {
 		Token &	operator=(Token const &);
 };
 
-#endif // LEXER_HPP
+#endif // TOKEN_HPP
