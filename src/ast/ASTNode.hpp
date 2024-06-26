@@ -6,7 +6,7 @@
 /*   By: lgreau <lgreau@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 14:16:55 by lgreau            #+#    #+#             */
-/*   Updated: 2024/06/26 14:29:34 by lgreau           ###   ########.fr       */
+/*   Updated: 2024/06/26 14:42:18 by lgreau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 #ifndef ASTNODE_HPP
 # define ASTNODE_HPP
 
+# include <vector>
+# include <string>
 # include <optional>
 # include <memory>
 # include "../token/Token.hpp"
@@ -38,11 +40,11 @@ class InstructionNode : public ASTNode {
 
 class ProgramNode : public ASTNode {
 	private:
-		ProgramNode();
 		ProgramNode(ProgramNode const &);
 		ProgramNode &	operator=(ProgramNode const &);
 
 	public:
+		ProgramNode();
 		std::vector<std::unique_ptr<InstructionNode>>	instructions;
 		void	addInstruction(std::unique_ptr<InstructionNode> instr);
 };
