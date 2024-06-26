@@ -1,26 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Abstract-vm.hpp                                    :+:      :+:    :+:   */
+/*   ASTNode.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lgreau <lgreau@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/26 14:06:01 by lgreau            #+#    #+#             */
-/*   Updated: 2024/06/26 14:31:04 by lgreau           ###   ########.fr       */
+/*   Created: 2024/06/26 14:19:24 by lgreau            #+#    #+#             */
+/*   Updated: 2024/06/26 14:20:33 by lgreau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#pragma once
-#ifndef ABSTRACT_VM_HPP
-# define ABSTRACT_VM_HPP
+#include "ASTNode.hpp"
 
-# include "token/Token.hpp"
-# include "lexer/Lexer.hpp"
-# include "ast/ASTNode.hpp"
-# include "parser/Parser.hpp"
+InstructionNode::InstructionNode(Token instruction, std::optional<Token> value = std::nullopt)
+		: instruction(instruction), value(value) {}
 
-#include <iostream>
-#include <fstream>
-#include <sstream>
 
-#endif // ABSTRACT_VM_HPP
+void	ProgramNode::addInstruction(std::unique_ptr<InstructionNode> instr) {
+		instructions.push_back(std::move(instr));
+}

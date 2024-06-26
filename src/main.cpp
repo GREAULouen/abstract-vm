@@ -6,7 +6,7 @@
 /*   By: lgreau <lgreau@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 14:03:21 by lgreau            #+#    #+#             */
-/*   Updated: 2024/06/26 14:13:16 by lgreau           ###   ########.fr       */
+/*   Updated: 2024/06/26 14:31:50 by lgreau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,8 @@ int	main(void)
 		Lexer				lexer(input);
 		std::vector<Token>	tokens = lexer.tokenize();
 
-		std::cout << "Found tokens:" << std::endl;
-		for (std::vector<Token>::iterator it = tokens.begin(); it != tokens.end(); ++it)
-		{
-			std::cout << (*it).value << std::endl;
-		}
+		Parser				parser(tokens);
+
+		auto	program = parser.parse();
 	}
 }
