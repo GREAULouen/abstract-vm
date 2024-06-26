@@ -1,14 +1,28 @@
 CPP		 =	c++
-CPPFLAGS =	-Wall -Wextra -Werror -std=c++11
+CPPFLAGS =	-Wall -Wextra -Werror -std=c++17
 
 SRC_DIR  =	src
 OBJ_DIR  =	obj
 
 NAME	 =	abstract-vm
-SRC		 =
+SRC		 =	main.cpp				\
+			Token.cpp				\
+			Lexer.cpp				\
+			ASTNode.cpp				\
+			Parser.cpp
+
+SUB_DIR =	$(SRC_DIR)					\
+			$(SRC_DIR)/lexer			\
+			$(SRC_DIR)/token			\
+			$(SRC_DIR)/ast				\
+			$(SRC_DIR)/parser
+
+
+vpath %.cpp $(SUB_DIR)
+
 OBJ		 =	$(addprefix $(OBJ_DIR)/, $(SRC:%.cpp=%.o))
 
-vpath %.cpp $(SRC_DIR)
+
 
 all: $(NAME)
 
