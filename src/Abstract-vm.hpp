@@ -6,7 +6,7 @@
 /*   By: lgreau <lgreau@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 14:06:01 by lgreau            #+#    #+#             */
-/*   Updated: 2024/06/27 13:08:00 by lgreau           ###   ########.fr       */
+/*   Updated: 2024/06/27 15:43:46 by lgreau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,5 +22,8 @@
 
 #include <fstream>
 #include <sstream>
+
+# define RESET "\033[0m"
+# define RED "\033[0;31m"
 
 #endif // ABSTRACT_VM_HPP

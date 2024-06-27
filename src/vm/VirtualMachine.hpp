@@ -6,7 +6,7 @@
 /*   By: lgreau <lgreau@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 15:07:56 by lgreau            #+#    #+#             */
-/*   Updated: 2024/06/27 14:56:17 by lgreau           ###   ########.fr       */
+/*   Updated: 2024/06/27 15:52:25 by lgreau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,9 @@
 # include <stack>
 # include <regex>
 # include <iostream>
+
+# define RESET "\033[0m"
+# define RED "\033[0;31m"
 
 class VirtualMachine
 {
@@ -75,7 +78,10 @@ class VirtualMachine
 				delete lhs;
 				delete rhs;
 			} catch (std::runtime_error &e) {
-				std::cerr << e.what() << " '" << opName << "'" << std::endl;
+				std::cerr	<< RED
+							<< e.what() << " '" << opName << "'"
+							<< RESET
+							<< std::endl;
 			}
 		}
 
