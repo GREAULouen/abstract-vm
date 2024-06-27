@@ -6,7 +6,7 @@
 /*   By: lgreau <lgreau@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 11:05:24 by lgreau            #+#    #+#             */
-/*   Updated: 2024/06/27 11:12:10 by lgreau           ###   ########.fr       */
+/*   Updated: 2024/06/27 13:43:51 by lgreau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 # define OPERAND_HPP
 
 # include "IOperand.hpp"
+# include <sstream>
+# include <iostream>
 
 template<typename T>
 class Operand: public IOperand
@@ -22,7 +24,7 @@ class Operand: public IOperand
 	private:
 		Operand() {}
 		Operand(Operand const &toCopy) {*this = toCopy;}
-		Operand &	opeartor=(Operand const &toAssign) {
+		Operand &	operator=(Operand const &toAssign) {
 			if (this == &toAssign) {return *this;}
 			this->_value = toAssign._value;
 			this->_type = toAssign._type;
@@ -38,7 +40,7 @@ class Operand: public IOperand
 		~Operand() {}
 
 		Operand(T value, eOperandType type) : _value(value), _type(type) {
-			std::ostringstream oss;
+			std::ostringstream	oss;
 			oss << this->_value;
 			this->_str_repr = oss.str();
 		}
@@ -62,7 +64,7 @@ class Operand: public IOperand
 		}
 
 		IOperand const *operator*(IOperand const &rhs) const override {
-			T result = value * static_cast<T>(std::stod(rhs.toString()));
+			T result = this->_value * static_cast<T>(std::stod(rhs.toString()));
 			return new Operand(result, this->_type);
 		}
 
@@ -80,7 +82,7 @@ class Operand: public IOperand
 			if (rhsValue == 0) {
 				throw std::runtime_error("Modulo by zero");
 			}
-			T result = std::fmod(this->_value, rhsValue);
+			T result = fmod(this->_value, rhsValue);
 			return new Operand(result, this->_type);
 		}
 

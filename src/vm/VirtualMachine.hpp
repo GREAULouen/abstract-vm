@@ -6,7 +6,7 @@
 /*   By: lgreau <lgreau@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 15:07:56 by lgreau            #+#    #+#             */
-/*   Updated: 2024/06/27 11:34:27 by lgreau           ###   ########.fr       */
+/*   Updated: 2024/06/27 13:44:06 by lgreau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 # include "../ast/ASTNode.hpp"
 
 # include <stack>
+# include <regex>
+# include <iostream>
 
 class VirtualMachine
 {
@@ -26,8 +28,8 @@ class VirtualMachine
 		VirtualMachine(VirtualMachine const &);
 		VirtualMachine &	operator=(VirtualMachine const &);
 
-		OperandFactory			_operand_factory;
-		std::stack<IOperand*>	_stack;
+		std::unique_ptr<OperandFactory>	_operand_factory;
+		std::stack<const IOperand*>		_stack;
 
 		void	_executeInstruction(const InstructionNode& instruction);
 
@@ -43,8 +45,45 @@ class VirtualMachine
 		void	_executePrint();
 		void	_executeExit();
 
+
+		/*	~~~~~~~~~~~~~~~~ UTILS ~~~~~~~~~~~~~~~~	*/
+
+		std::pair<eOperandType, std::string>			parseValue(const std::string& value);
+		std::pair<const IOperand *, const IOperand *>	getOperands(void);
+
+		template <typename Op>
+		void	performBinaryOperation(Op op, const std::string& opName) {
+			try {
+				auto [lhs, rhs]	= getOperands();
+
+				eOperandType	resultType = static_cast<eOperandType>(std::max(lhs->getPrecision(), rhs->getPrecision()));
+
+				const IOperand	*result = nullptr;
+				if (resultType <= eOperandType::INT32) {
+					int	lhsValue = std::stoi(lhs->toString());
+					int	rhsValue = std::stoi(rhs->toString());
+					int	resultValue = op(lhsValue, rhsValue);
+					result = this->_operand_factory->createOperand(resultType, std::to_string(resultValue));
+				} else {
+					double	lhsValue = std::stod(lhs->toString());
+					double	rhsValue = std::stod(rhs->toString());
+					double	resultValue = op(lhsValue, rhsValue);
+					result = this->_operand_factory->createOperand(resultType, std::to_string(resultValue));
+				}
+
+				this->_stack.push(result);
+				delete lhs;
+				delete rhs;
+			} catch (std::runtime_error &e) {
+				std::cerr << e.what() << " '" << opName << "'" << std::endl;
+			}
+		}
+
 	public:
-		void	executeProgram(const ProgramNode& program);
+		VirtualMachine();
+		~VirtualMachine();
+
+		void	executeProgram(ProgramNode * program);
 
 };
 

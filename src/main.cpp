@@ -6,7 +6,7 @@
 /*   By: lgreau <lgreau@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 14:03:21 by lgreau            #+#    #+#             */
-/*   Updated: 2024/06/26 14:46:30 by lgreau           ###   ########.fr       */
+/*   Updated: 2024/06/27 13:15:05 by lgreau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,37 +23,52 @@ std::string readFile(const std::string &filename) {
 	return buffer.str();
 }
 
-int	main(void)
-{
-	std::string	input_file_path = "test_files/simple.avm";
+std::string readInput() {
+	std::string	input;
+	std::string	line;
 
+	while (std::getline(std::cin, line)) {
+		if (line == ";;")
+			break;
+
+		input += line + "\n";
+	}
+	return input;
+}
+
+int	main(int argc, char *argv[])
+{
 	std::string input;
 
-	try {
-		input = readFile(input_file_path);
-	} catch (const std::runtime_error &e) {
-		std::cerr << e.what() << std::endl;
-		return 1;
+	if (argc == 2) {
+		std::string input_file_path = argv[1];
+
+		try {
+			input = readFile(input_file_path);
+		} catch (const std::runtime_error &e) {
+			std::cerr << e.what() << std::endl;
+			return 1;
+		}
+	} else {
+		std::cout << "Enter your AVM program (end with ';;'):" << std::endl;
+		input = readInput();
 	}
 
-	{
-		Lexer				lexer(input);
-		std::vector<Token>	tokens = lexer.tokenize();
+	try {
+		Lexer lexer(input);
+		std::vector<Token> tokens = lexer.tokenize();
 
 		std::cout << "Tokenized input:" << std::endl;
-		for (std::vector<Token>::iterator it = tokens.begin(); it != tokens.end(); ++it)
-			std::cout << (*it).value << std::endl;
-
-		Parser				parser(tokens);
-
-		try
-		{
-			auto	program = parser.parse();
-		}
-		catch(const std::exception& e)
-		{
-			std::cerr << e.what() << '\n';
+		for (const auto& token : tokens) {
+			std::cout << token.value << std::endl;
 		}
 
+		Parser parser(tokens);
+		auto program = parser.parse();
+		VirtualMachine vm;
+		vm.executeProgram(program.get());
+	} catch (const std::exception &e) {
+		std::cerr << e.what() << std::endl;
+		return 1;
 	}
 }
