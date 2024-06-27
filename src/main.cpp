@@ -6,7 +6,7 @@
 /*   By: lgreau <lgreau@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 14:03:21 by lgreau            #+#    #+#             */
-/*   Updated: 2024/06/27 15:48:05 by lgreau           ###   ########.fr       */
+/*   Updated: 2024/06/27 17:41:57 by lgreau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,40 +53,8 @@ int	main(int argc, char *argv[])
 		input = readStandardInput();
 	}
 
-	Lexer				lexer(input);
-	std::vector<Token>	tokens;
-	try {
-		tokens = lexer.tokenize();
-	} catch(std::runtime_error &e) {
-		std::cerr	<< RED
-					<< e.what()
-					<< RESET
-					<< std::endl;
-		return 1;
-	}
+	VirtualMachine	vm;
+	int	status = vm.runProgram(input);
 
-	std::cout << "Tokenized input:" << std::endl;
-	for (const auto &token : tokens) {
-		std::cout	<< static_cast<int>(token.type)
-					<< ": "
-					<< token.value << std::endl;
-	}
-
-	Parser	parser(tokens);
-
-	try {
-		auto program = parser.parse();
-
-		std::cout << "Execution:" << std::endl;
-
-		VirtualMachine	vm;
-		vm.executeProgram(program);
-	} catch (const std::exception &e) {
-		std::cerr	<< RED
-					<< e.what()
-					<< RESET
-					<< std::endl;
-	}
-
-	return 0;
+	return status;
 }

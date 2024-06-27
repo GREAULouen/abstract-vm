@@ -11,7 +11,8 @@ SRC		 =	main.cpp				\
 			ASTNode.cpp				\
 			Parser.cpp				\
 			OperandFactory.cpp		\
-			VirtualMachine.cpp
+			VirtualMachine.cpp		\
+			Executer.cpp
 
 SUB_DIR =	$(SRC_DIR)					\
 			$(SRC_DIR)/lexer			\
@@ -19,7 +20,8 @@ SUB_DIR =	$(SRC_DIR)					\
 			$(SRC_DIR)/ast				\
 			$(SRC_DIR)/parser			\
 			$(SRC_DIR)/vm				\
-			$(SRC_DIR)/operand
+			$(SRC_DIR)/operand			\
+			$(SRC_DIR)/exec
 
 
 vpath %.cpp $(SUB_DIR)

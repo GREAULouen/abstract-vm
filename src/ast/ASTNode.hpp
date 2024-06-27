@@ -6,7 +6,7 @@
 /*   By: lgreau <lgreau@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 14:16:55 by lgreau            #+#    #+#             */
-/*   Updated: 2024/06/27 14:10:40 by lgreau           ###   ########.fr       */
+/*   Updated: 2024/06/27 16:59:35 by lgreau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,6 @@ class ProgramNode : public ASTNode {
 		ProgramNode();
 		std::vector<InstructionNode *>	instructions;
 		void	addInstruction(InstructionNode * instr);
-
-		void	print() const;
 };
 
 #endif // ASTNODE_HPP
