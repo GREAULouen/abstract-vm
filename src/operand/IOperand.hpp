@@ -6,7 +6,7 @@
 /*   By: lgreau <lgreau@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 10:59:29 by lgreau            #+#    #+#             */
-/*   Updated: 2024/06/27 11:02:05 by lgreau           ###   ########.fr       */
+/*   Updated: 2024/06/27 11:14:05 by lgreau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # include <string>
 
 enum class eOperandType {
-	INT8, INT16, INT32, FLOAT, DOUBLE, UNKNOWN
+	INT8, INT16, INT32, FLOAT, DOUBLE
 };
 
 class IOperand {
