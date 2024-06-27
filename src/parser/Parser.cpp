@@ -6,7 +6,7 @@
 /*   By: lgreau <lgreau@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 14:23:38 by lgreau            #+#    #+#             */
-/*   Updated: 2024/06/27 19:02:44 by lgreau           ###   ########.fr       */
+/*   Updated: 2024/06/27 19:17:33 by lgreau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,9 @@ InstructionNode*	Parser::parseInstruction() {
 			return new InstructionNode(token);
 		case TokenType::UNKNOWN:
 			return new InstructionNode(token);
+		case TokenType::VALUE:
+			flushError("" + token.value + " can only be pushed");
+			return new InstructionNode(Token(TokenType::UNKNOWN, ""));
 		default:
 			throw std::runtime_error("Unexpected token type");
 	}

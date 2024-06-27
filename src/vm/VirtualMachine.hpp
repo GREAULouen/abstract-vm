@@ -6,7 +6,7 @@
 /*   By: lgreau <lgreau@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 16:29:11 by lgreau            #+#    #+#             */
-/*   Updated: 2024/06/27 18:53:15 by lgreau           ###   ########.fr       */
+/*   Updated: 2024/06/27 19:05:10 by lgreau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,6 @@
 # include "../lexer/Lexer.hpp"
 # include "../parser/Parser.hpp"
 # include "../exec/Executer.hpp"
-
-# define RESET "\033[0m"
-# define RED "\033[0;31m"
 
 class VirtualMachine
 {

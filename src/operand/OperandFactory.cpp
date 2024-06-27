@@ -6,7 +6,7 @@
 /*   By: lgreau <lgreau@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 11:23:08 by lgreau            #+#    #+#             */
-/*   Updated: 2024/06/27 18:33:14 by lgreau           ###   ########.fr       */
+/*   Updated: 2024/06/27 19:38:11 by lgreau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ IOperand const *OperandFactory::_createInt8(std::string const &value) const {
 }
 
 IOperand const *OperandFactory::_createInt16(std::string const &value) const {
-	int16_t	val = static_cast<int16_t>(std::stoi(value));
+	int32_t	val = static_cast<int32_t>(std::stol(value));
 
 	if (val > INT16_MAX || val < INT16_MIN)
 	{
@@ -65,7 +65,7 @@ IOperand const *OperandFactory::_createInt16(std::string const &value) const {
 }
 
 IOperand const *OperandFactory::_createInt32(std::string const &value) const {
-	int32_t	val = static_cast<int32_t>(std::stoi(value));
+	int64_t	val = static_cast<int64_t>(std::stoll(value));
 
 	if (val > INT32_MAX || val < INT32_MIN)
 	{

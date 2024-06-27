@@ -22,10 +22,25 @@ assert double(0)                       ; Different types  (int8 vs double)
 assert int8(10)                        ; Different values (0 vs 10)
 
 
+pop
+pop
+
+push int32(64)
+push float(0)
+dump
+
 ; -- Binary Operations -- ;
-div                                    ; Division by 0
+div                                    ; Division by 0 => Consume the 2 values required for the operation
+
+push int32(64)
+push float(0)
+dump
 mod                                    ; Modulo 0
 
+
+push int32(64)
+push float(0)
+dump
 pop                                    ; Stack has only 1 operand (int8(0))
 print
 mul
@@ -33,3 +48,4 @@ mul
 
 ; -- Over/Under flow -- ;
 push int8(256)                         ; Any out of range value goes to 0
+push int32(-2147483649)

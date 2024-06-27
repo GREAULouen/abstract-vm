@@ -6,7 +6,7 @@
 /*   By: lgreau <lgreau@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 11:35:35 by lgreau            #+#    #+#             */
-/*   Updated: 2024/06/27 18:54:09 by lgreau           ###   ########.fr       */
+/*   Updated: 2024/06/27 19:33:53 by lgreau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,11 +157,11 @@ void Executer::_executeMul() {
 }
 
 void Executer::_executeDiv() {
-	performBinaryOperation(std::divides<double>(), "/");
+	performBinaryOperation(divide, "/");
 }
 
 void Executer::_executeMod() {
-	performBinaryOperation(std::modulus<int>(), "%");
+	performBinaryOperation(modulo, "%");
 }
 
 
@@ -211,9 +211,9 @@ std::pair<eOperandType, std::string>	Executer::parseValue(const std::string& val
 }
 
 
-std::pair<const IOperand *, const IOperand *>	Executer::getOperands(void) {
+std::pair<const IOperand *, const IOperand *>	Executer::getOperands(const std::string& opName) {
 	if (this->_stack.size() < 2)
-		throw std::runtime_error("Not enough operands to perform: ");
+		throw std::runtime_error("Not enough operands to perform: '" + opName + "'");
 
 	const IOperand	*rhs = this->_stack.top();
 	this->_stack.pop();
@@ -232,4 +232,24 @@ void	Executer::flushError(std::string error_msg) {
 				<< error_msg
 				<< RESET
 				<< std::endl;
+}
+
+
+
+
+
+double	divide(double lhs, double rhs) {
+	if (rhs == 0.0) {
+		throw std::runtime_error("Divisin by 0");
+	}
+
+	return lhs / rhs;
+}
+
+int	modulo(int lhs, int rhs) {
+	if (rhs == 0) {
+		throw std::runtime_error("Modulo by 0");
+	}
+
+	return lhs % rhs;
 }

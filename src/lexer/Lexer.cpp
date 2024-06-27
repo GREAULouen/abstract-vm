@@ -6,7 +6,7 @@
 /*   By: lgreau <lgreau@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 13:47:04 by lgreau            #+#    #+#             */
-/*   Updated: 2024/06/27 19:01:52 by lgreau           ###   ########.fr       */
+/*   Updated: 2024/06/27 19:19:06 by lgreau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ std::string	Lexer::parseValue() {
 	}
 
 	flushError("Invalid value format at position: " + std::to_string(this->_pos));
+	this->_pos++;
 	return ("");
 }
 
@@ -97,11 +98,13 @@ Token	Lexer::parseKeywordOrValue() {
 
 	if (tokenValue == "int8" || tokenValue == "int16" || tokenValue == "int32" ||
 		tokenValue == "float" || tokenValue == "double") {
-		std::string	parenthesized_value = parseParenthesizedValue();
-		if (this->_input[this->_pos] == '(' && parenthesized_value != "") {
-			std::string fullValue = tokenValue + parenthesized_value;
-			return Token(TokenType::VALUE, fullValue);
-		} else if (parenthesized_value != "") {
+		if (this->_input[this->_pos] == '(') {
+			std::string	parenthesized_value = parseParenthesizedValue();
+			if (!parenthesized_value.empty()) {
+				std::string fullValue = tokenValue + parenthesized_value;
+				return Token(TokenType::VALUE, fullValue);
+			}
+
 			flushError("Invalid value format: " + tokenValue);
 			return Token(TokenType::UNKNOWN, "");
 		}

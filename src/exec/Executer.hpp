@@ -52,24 +52,24 @@ class Executer
 		/*	~~~~~~~~~~~~~~~~ UTILS ~~~~~~~~~~~~~~~~	*/
 
 		std::pair<eOperandType, std::string>			parseValue(const std::string& value);
-		std::pair<const IOperand *, const IOperand *>	getOperands(void);
+		std::pair<const IOperand *, const IOperand *>	getOperands(const std::string& opName);
 
 		template <typename Op>
 		void	performBinaryOperation(Op op, const std::string& opName) {
 			try {
-				auto [lhs, rhs]	= getOperands();
+				auto [lhs, rhs]	= getOperands(opName);
 
 				eOperandType	resultType = static_cast<eOperandType>(std::max(lhs->getPrecision(), rhs->getPrecision()));
 
 				const IOperand	*result = nullptr;
 				if (resultType <= eOperandType::INT32) {
-					int	lhsValue = std::stoi(lhs->toString());
-					int	rhsValue = std::stoi(rhs->toString());
+					int	lhsValue = std::stoll(lhs->toString());
+					int	rhsValue = std::stoll(rhs->toString());
 					int	resultValue = op(lhsValue, rhsValue);
 					result = this->_operand_factory.createOperand(resultType, std::to_string(resultValue));
 				} else {
-					double	lhsValue = std::stod(lhs->toString());
-					double	rhsValue = std::stod(rhs->toString());
+					double	lhsValue = std::stold(lhs->toString());
+					double	rhsValue = std::stold(rhs->toString());
 					double	resultValue = op(lhsValue, rhsValue);
 					result = this->_operand_factory.createOperand(resultType, std::to_string(resultValue));
 				}
@@ -79,11 +79,9 @@ class Executer
 				delete rhs;
 			} catch (std::runtime_error &e) {
 				std::stringstream	error_msg;
-				error_msg	<< e.what()
-							<< " '" << opName << "'";
+				error_msg	<< e.what();
 				flushError(error_msg.str());
 				return ;
-				// throw std::runtime_error(error_msg.str());
 			} catch (std::exception &e) {
 				std::cerr	<< RED
 							<< "Unforseen exception caught: "
@@ -101,5 +99,8 @@ class Executer
 		void	flushError(std::string error_msg);
 
 };
+
+double	divide(double lhs, double rhs);
+int		modulo(int lhs, int rhs);
 
 #endif // EXECUTER_HPP
