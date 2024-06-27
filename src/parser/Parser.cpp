@@ -6,7 +6,7 @@
 /*   By: lgreau <lgreau@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 14:23:38 by lgreau            #+#    #+#             */
-/*   Updated: 2024/06/27 14:10:54 by lgreau           ###   ########.fr       */
+/*   Updated: 2024/06/27 19:17:33 by lgreau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,11 @@ InstructionNode*	Parser::parseInstruction() {
 			return new InstructionNode(token);
 		case TokenType::EXIT:
 			return new InstructionNode(token);
+		case TokenType::UNKNOWN:
+			return new InstructionNode(token);
+		case TokenType::VALUE:
+			flushError("" + token.value + " can only be pushed");
+			return new InstructionNode(Token(TokenType::UNKNOWN, ""));
 		default:
 			throw std::runtime_error("Unexpected token type");
 	}
@@ -65,15 +70,27 @@ InstructionNode*	Parser::parseInstruction() {
 InstructionNode*	Parser::parsePush() {
 	Token valueToken = this->_tokens[this->_pos++];
 	if (valueToken.type != TokenType::VALUE) {
-		throw std::runtime_error("Expected a value type token after push");
+		flushError("Expected a value type token after push");
 	}
+
 	return new InstructionNode(this->_tokens[this->_pos - 2], valueToken);
 }
 
 InstructionNode*	Parser::parseAssert() {
 	Token valueToken = this->_tokens[this->_pos++];
 	if (valueToken.type != TokenType::VALUE) {
-		throw std::runtime_error("Expected a value type token after assert");
+		flushError("Expected a value type token after assert");
 	}
 	return new InstructionNode(this->_tokens[this->_pos - 2], valueToken);
+}
+
+
+
+
+void	Parser::flushError(std::string error_msg) {
+	std::cerr	<< RED
+				<< "Syntactic error: "
+				<< error_msg
+				<< RESET
+				<< std::endl;
 }

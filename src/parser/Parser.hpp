@@ -6,7 +6,7 @@
 /*   By: lgreau <lgreau@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 14:15:04 by lgreau            #+#    #+#             */
-/*   Updated: 2024/06/27 14:05:04 by lgreau           ###   ########.fr       */
+/*   Updated: 2024/06/27 19:00:40 by lgreau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,10 @@
 # include <string>
 # include <vector>
 # include <optional>
+# include <iostream>
+
+# define RESET "\033[0m"
+# define RED "\033[0;31m"
 
 # include "../token/Token.hpp"
 # include "../ast/ASTNode.hpp"
@@ -37,6 +41,8 @@ class Parser {
 	public:
 		Parser(const std::vector<Token> &tokens);
 		ProgramNode *	parse();
+
+		void	flushError(std::string);
 };
 
 #endif // PARSER_HPP

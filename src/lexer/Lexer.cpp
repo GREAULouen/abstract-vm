@@ -6,7 +6,7 @@
 /*   By: lgreau <lgreau@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 13:47:04 by lgreau            #+#    #+#             */
-/*   Updated: 2024/06/27 14:25:34 by lgreau           ###   ########.fr       */
+/*   Updated: 2024/06/27 19:19:06 by lgreau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ std::vector<Token>	Lexer::tokenize() {
 			continue;
 		}
 
-		throw std::runtime_error("Unexpected character: " + std::string(1, this->_input[this->_pos]));
+		flushError("Unexpected character: " + std::string(1, this->_input[this->_pos]));
 	}
 
 	tokens.push_back(Token(TokenType::END, "#"));
@@ -63,7 +63,9 @@ std::string	Lexer::parseValue() {
 		return match.str();
 	}
 
-	throw std::runtime_error("Invalid value format at position: " + std::to_string(this->_pos));
+	flushError("Invalid value format at position: " + std::to_string(this->_pos));
+	this->_pos++;
+	return ("");
 }
 
 Token	Lexer::parseKeywordOrValue() {
@@ -97,14 +99,19 @@ Token	Lexer::parseKeywordOrValue() {
 	if (tokenValue == "int8" || tokenValue == "int16" || tokenValue == "int32" ||
 		tokenValue == "float" || tokenValue == "double") {
 		if (this->_input[this->_pos] == '(') {
-			std::string fullValue = tokenValue + parseParenthesizedValue();
-			return Token(TokenType::VALUE, fullValue);
-		} else {
-			throw std::runtime_error("Invalid value format: " + tokenValue);
+			std::string	parenthesized_value = parseParenthesizedValue();
+			if (!parenthesized_value.empty()) {
+				std::string fullValue = tokenValue + parenthesized_value;
+				return Token(TokenType::VALUE, fullValue);
+			}
+
+			flushError("Invalid value format: " + tokenValue);
+			return Token(TokenType::UNKNOWN, "");
 		}
 	}
 
-	throw std::runtime_error("Invalid keyword: " + tokenValue);
+	flushError("Invalid keyword: " + tokenValue);
+	return Token(TokenType::UNKNOWN, "");
 }
 
 
@@ -121,5 +128,17 @@ std::string	Lexer::parseParenthesizedValue() {
 		return value;
 	}
 
-	throw std::runtime_error("Mismatched parentheses in value");
+	flushError("Mismatched parentheses in value");
+	return "";
+}
+
+
+
+
+void	Lexer::flushError(std::string error_msg) {
+	std::cerr	<< RED
+				<< "Lexical error: "
+				<< error_msg
+				<< RESET
+				<< std::endl;
 }

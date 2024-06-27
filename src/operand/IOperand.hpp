@@ -6,7 +6,7 @@
 /*   By: lgreau <lgreau@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 10:59:29 by lgreau            #+#    #+#             */
-/*   Updated: 2024/06/27 11:22:05 by lgreau           ###   ########.fr       */
+/*   Updated: 2024/06/27 16:17:15 by lgreau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,9 @@
 # define IOPERAND_HPP
 
 # include <string>
+
+# define RESET "\033[0m"
+# define RED "\033[0;31m"
 
 enum class eOperandType {
 	INT8, INT16, INT32, FLOAT, DOUBLE, UNKNOWN
