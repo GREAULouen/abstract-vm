@@ -4,9 +4,9 @@
 
 push int32(42)
 push int32(33)
-add
+add                                    ; 42 + 33 = 75
 push float(44.55)
-mul
+mul                                    ; 75 * 44.55 = 3341.25
 push double(42.42)
 push int32(42)
 dump
