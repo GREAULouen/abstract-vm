@@ -9,13 +9,19 @@ SRC		 =	main.cpp				\
 			Token.cpp				\
 			Lexer.cpp				\
 			ASTNode.cpp				\
-			Parser.cpp
+			Parser.cpp				\
+			OperandFactory.cpp		\
+			VirtualMachine.cpp		\
+			Executer.cpp
 
 SUB_DIR =	$(SRC_DIR)					\
 			$(SRC_DIR)/lexer			\
 			$(SRC_DIR)/token			\
 			$(SRC_DIR)/ast				\
-			$(SRC_DIR)/parser
+			$(SRC_DIR)/parser			\
+			$(SRC_DIR)/vm				\
+			$(SRC_DIR)/operand			\
+			$(SRC_DIR)/exec
 
 
 vpath %.cpp $(SUB_DIR)

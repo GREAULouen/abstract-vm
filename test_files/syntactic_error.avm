@@ -1,0 +1,12 @@
+; -------------------------------------- ;
+; Showcase all possible syntactic errors ;
+; -------------------------------------- ;
+
+; -- Missing Operand -- ;
+assert
+push
+
+; -- Out of place Tokens -- ;
+int32(42)
+push pop
+

@@ -1,0 +1,10 @@
+; ------------------------------------ ;
+; Showcase all possible lexical errors ;
+; ------------------------------------ ;
+
+; -- Keywords -- ;
+pussh
+push int
+push int8()
+push int8(
+push int8)

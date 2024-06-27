@@ -1,0 +1,51 @@
+; ------------------------------------ ;
+; Showcase all possible runtime errors ;
+; ------------------------------------ ;
+
+; -- Empty stack -- ;
+pop
+print
+assert int8(5)
+dump                                   ; Not an error (Just does nothing)
+add                                    ; Using template functions => same behaviour for other binary operations
+
+
+; -- push format -- ;
+push int32(15.5)                       ; Any format error result in pushing
+push double(1.2.3)                     ; on the stack a int8 of value 0
+
+
+dump                                   ; Should print 0 & 0
+
+; -- Assert errors -- ;
+assert double(0)                       ; Different types  (int8 vs double)
+assert int8(10)                        ; Different values (0 vs 10)
+
+
+pop
+pop
+
+push int32(64)
+push float(0)
+dump
+
+; -- Binary Operations -- ;
+div                                    ; Division by 0 => Consume the 2 values required for the operation
+
+push int32(64)
+push float(0)
+dump
+mod                                    ; Modulo 0
+
+
+push int32(64)
+push float(0)
+dump
+pop                                    ; Stack has only 1 operand (int8(0))
+print
+mul
+
+
+; -- Over/Under flow -- ;
+push int8(256)                         ; Any out of range value goes to 0
+push int32(-2147483649)

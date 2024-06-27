@@ -6,7 +6,7 @@
 /*   By: lgreau <lgreau@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 13:47:00 by lgreau            #+#    #+#             */
-/*   Updated: 2024/06/26 14:52:31 by lgreau           ###   ########.fr       */
+/*   Updated: 2024/06/27 18:47:03 by lgreau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,12 @@
 
 # include <string>
 # include <vector>
+# include <unordered_map>
+# include <regex>
+# include <iostream>
+
+# define RESET "\033[0m"
+# define RED "\033[0;31m"
 
 # include "../token/Token.hpp"
 
@@ -32,15 +38,16 @@ class Lexer {
 		size_t		_pos;
 		size_t		_length;
 
-		char	currentChar() const;
-		void	consume();
-		void	skipComment();
-		Token	parseNumber(std::string::const_iterator& it);
-		Token	parseIdentifier(std::string::const_iterator& it);
+		void		skipComment();
+		std::string	parseValue();
+		Token		parseKeywordOrValue();
+		std::string	parseParenthesizedValue();
 
 	public:
 		Lexer(const std::string &input);
 		std::vector<Token>	tokenize();
+
+		void	flushError(std::string);
 };
 
 #endif // LEXER_HPP

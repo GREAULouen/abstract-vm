@@ -1,3 +1,5 @@
 abstract-vm
 obj
 *.pdf
+*.grammar
+todo.md
