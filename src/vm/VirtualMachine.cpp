@@ -6,13 +6,13 @@
 /*   By: lgreau <lgreau@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 11:35:35 by lgreau            #+#    #+#             */
-/*   Updated: 2024/06/27 13:42:59 by lgreau           ###   ########.fr       */
+/*   Updated: 2024/06/27 14:56:56 by lgreau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "VirtualMachine.hpp"
 
-VirtualMachine::VirtualMachine() {}
+VirtualMachine::VirtualMachine(): _operand_factory() {}
 
 VirtualMachine::VirtualMachine(VirtualMachine const &rhs) {*this = rhs;}
 VirtualMachine::~VirtualMachine() {}
@@ -74,11 +74,11 @@ void	VirtualMachine::_executeInstruction(const InstructionNode& instruction) {
 
 
 void	VirtualMachine::_executePush(const Token& valueToken){
-	if (!valueToken.is_operand())
+	if (valueToken.type != TokenType::VALUE)
 		throw std::runtime_error("Invalid value type for push: " + valueToken.value);
 
 	auto			[type, val]	= parseValue(valueToken.value);
-	const IOperand	*operand = this->_operand_factory->createOperand(type, val);
+	const IOperand	*operand = this->_operand_factory.createOperand(type, val);
 	this->_stack.push(operand);
 }
 
@@ -110,7 +110,7 @@ void	VirtualMachine::_executeAssert(const Token& valueToken){
 
 	auto			[type, val] = parseValue(valueToken.value);
 	const IOperand	*top = this->_stack.top();
-	const IOperand	*expected = this->_operand_factory->createOperand(type, val);
+	const IOperand	*expected = this->_operand_factory.createOperand(type, val);
 
 	if (top->toString() != expected->toString() || top->getType() != expected->getType()) {
 		delete expected;

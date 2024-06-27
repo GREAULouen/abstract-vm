@@ -6,7 +6,7 @@
 /*   By: lgreau <lgreau@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 15:07:56 by lgreau            #+#    #+#             */
-/*   Updated: 2024/06/27 13:44:06 by lgreau           ###   ########.fr       */
+/*   Updated: 2024/06/27 14:56:17 by lgreau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ class VirtualMachine
 		VirtualMachine(VirtualMachine const &);
 		VirtualMachine &	operator=(VirtualMachine const &);
 
-		std::unique_ptr<OperandFactory>	_operand_factory;
+		OperandFactory					_operand_factory;
 		std::stack<const IOperand*>		_stack;
 
 		void	_executeInstruction(const InstructionNode& instruction);
@@ -63,12 +63,12 @@ class VirtualMachine
 					int	lhsValue = std::stoi(lhs->toString());
 					int	rhsValue = std::stoi(rhs->toString());
 					int	resultValue = op(lhsValue, rhsValue);
-					result = this->_operand_factory->createOperand(resultType, std::to_string(resultValue));
+					result = this->_operand_factory.createOperand(resultType, std::to_string(resultValue));
 				} else {
 					double	lhsValue = std::stod(lhs->toString());
 					double	rhsValue = std::stod(rhs->toString());
 					double	resultValue = op(lhsValue, rhsValue);
-					result = this->_operand_factory->createOperand(resultType, std::to_string(resultValue));
+					result = this->_operand_factory.createOperand(resultType, std::to_string(resultValue));
 				}
 
 				this->_stack.push(result);

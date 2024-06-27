@@ -6,7 +6,7 @@
 /*   By: lgreau <lgreau@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 13:47:04 by lgreau            #+#    #+#             */
-/*   Updated: 2024/06/26 14:54:22 by lgreau           ###   ########.fr       */
+/*   Updated: 2024/06/27 14:25:34 by lgreau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,93 +15,111 @@
 Lexer::Lexer(const std::string &input) : _input(input), _pos(0), _length(input.length()) {}
 
 
-std::vector<Token> Lexer::tokenize() {
-	std::vector<Token> tokens;
-		std::string::const_iterator it = this->_input.begin();
+std::vector<Token>	Lexer::tokenize() {
+	std::vector<Token>	tokens;
 
-		while (it != this->_input.end()) {
-			if (std::isspace(*it)) {
-				++it;
-				continue;
-			}
-
-			if (*it == ';') {
-				while (it != this->_input.end() && *it != '\n') ++it;  // Skip comments
-				continue;
-			}
-
-			if (std::isdigit(*it) || (*it == '-' && std::isdigit(*(it + 1)))) {
-				tokens.push_back(parseNumber(it));
-				continue;
-			}
-
-			if (std::isalpha(*it)) {
-				tokens.push_back(parseIdentifier(it));
-				continue;
-			}
-
-			if (*it == '(' || *it == ')') {
-				tokens.push_back(Token(TokenType::VALUE, std::string(1, *it)));
-				++it;
-				continue;
-			}
-
-			throw std::runtime_error("Unexpected character: " + std::string(1, *it));
+	while (this->_pos < this->_length) {
+		if (std::isspace(this->_input[this->_pos])) {
+			this->_pos++;
+			continue;
 		}
 
-		tokens.push_back(Token(TokenType::END, "#"));
-		return tokens;
+		if (this->_input[this->_pos] == ';') {
+			skipComment();
+			continue;
+		}
+
+		if (std::isdigit(this->_input[this->_pos]) || this->_input[this->_pos] == '-' || this->_input[this->_pos] == '.') {
+			tokens.push_back(Token(TokenType::VALUE, parseValue()));
+			continue;
+		}
+
+		if (std::isalpha(this->_input[this->_pos])) {
+			tokens.push_back(parseKeywordOrValue());
+			continue;
+		}
+
+		throw std::runtime_error("Unexpected character: " + std::string(1, this->_input[this->_pos]));
+	}
+
+	tokens.push_back(Token(TokenType::END, "#"));
+	return tokens;
 }
 
-
-char Lexer::currentChar() const {
-	return this->_pos < this->_length ? this->_input[this->_pos] : '\0';
-}
-void Lexer::consume() {
-	this->_pos++;
-}
-
-
-void Lexer::skipComment() {
-	while (this->_pos < this->_length && currentChar() != '\n') {
-		consume();
+void	Lexer::skipComment() {
+	while (this->_pos < this->_length && this->_input[this->_pos] != '\n') {
+		this->_pos++;
 	}
 }
 
-Token	Lexer::parseNumber(std::string::const_iterator& it) {
-	std::string	number;
+std::string	Lexer::parseValue() {
+	static const std::regex valueRegex(R"((int8|int16|int32|float|double)\((-?\d+(\.\d+)?)\))");
+	std::smatch match;
+	std::string::const_iterator start = this->_input.begin() + this->_pos;
+	std::string::const_iterator end = this->_input.end();
 
-	while (it != this->_input.end() && (std::isdigit(*it) || *it == '.' || *it == '-')) {
-		number += *it;
-		++it;
+	if (std::regex_search(start, end, match, valueRegex)) {
+		this->_pos += match.position() + match.length();
+		return match.str();
 	}
-	return Token(TokenType::VALUE, number);
+
+	throw std::runtime_error("Invalid value format at position: " + std::to_string(this->_pos));
 }
 
-Token	Lexer::parseIdentifier(std::string::const_iterator& it) {
-	std::string	identifier;
+Token	Lexer::parseKeywordOrValue() {
+	static const std::unordered_map<std::string, TokenType>	keywords = {
+		{"push", TokenType::PUSH},
+		{"pop", TokenType::POP},
+		{"dump", TokenType::DUMP},
+		{"assert", TokenType::ASSERT},
+		{"add", TokenType::ADD},
+		{"sub", TokenType::SUB},
+		{"mul", TokenType::MUL},
+		{"div", TokenType::DIV},
+		{"mod", TokenType::MOD},
+		{"print", TokenType::PRINT},
+		{"exit", TokenType::EXIT},
+	};
 
-	while (it != this->_input.end() && std::isalnum(*it)) {
-		identifier += *it;
-		++it;
+	std::string	tokenValue;
+	while (this->_pos < this->_length && std::isalpha(this->_input[this->_pos])) {
+		tokenValue += this->_input[this->_pos++];
 	}
 
-	if (identifier == "push") return Token(TokenType::PUSH, identifier);
-	if (identifier == "pop") return Token(TokenType::POP, identifier);
-	if (identifier == "dump") return Token(TokenType::DUMP, identifier);
-	if (identifier == "assert") return Token(TokenType::ASSERT, identifier);
-	if (identifier == "add") return Token(TokenType::ADD, identifier);
-	if (identifier == "sub") return Token(TokenType::SUB, identifier);
-	if (identifier == "mul") return Token(TokenType::MUL, identifier);
-	if (identifier == "div") return Token(TokenType::DIV, identifier);
-	if (identifier == "mod") return Token(TokenType::MOD, identifier);
-	if (identifier == "print") return Token(TokenType::PRINT, identifier);
-	if (identifier == "exit") return Token(TokenType::EXIT, identifier);
-	if (identifier == "int8") return Token(TokenType::INT8, identifier);
-	if (identifier == "int16") return Token(TokenType::INT16, identifier);
-	if (identifier == "int32") return Token(TokenType::INT32, identifier);
-	if (identifier == "float") return Token(TokenType::FLOAT, identifier);
-	if (identifier == "double") return Token(TokenType::DOUBLE, identifier);
+	if (keywords.find(tokenValue) != keywords.end()) {
+		return Token(keywords.at(tokenValue), tokenValue);
+	}
 
-	return Token(TokenType::UNKNOWN, identifier);
+	if (tokenValue == "int")
+		while (this->_pos < this->_length && std::isdigit(this->_input[this->_pos]))
+			tokenValue += this->_input[this->_pos++];
+
+	if (tokenValue == "int8" || tokenValue == "int16" || tokenValue == "int32" ||
+		tokenValue == "float" || tokenValue == "double") {
+		if (this->_input[this->_pos] == '(') {
+			std::string fullValue = tokenValue + parseParenthesizedValue();
+			return Token(TokenType::VALUE, fullValue);
+		} else {
+			throw std::runtime_error("Invalid value format: " + tokenValue);
+		}
+	}
+
+	throw std::runtime_error("Invalid keyword: " + tokenValue);
+}
+
+
+std::string	Lexer::parseParenthesizedValue() {
+	std::string	value;
+	value += this->_input[this->_pos++]; // Add the opening '('
+
+	while (this->_pos < this->_length && this->_input[this->_pos] != ')') {
+		value += this->_input[this->_pos++];
+	}
+
+	if (this->_pos < this->_length && this->_input[this->_pos] == ')') {
+		value += this->_input[this->_pos++]; // Add the closing ')'
+		return value;
+	}
+
+	throw std::runtime_error("Mismatched parentheses in value");
 }

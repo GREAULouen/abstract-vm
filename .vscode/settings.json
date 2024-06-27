@@ -66,6 +66,8 @@
     "stack": "cpp",
     "__memory": "cpp",
     "filesystem": "cpp",
-    "regex": "cpp"
+    "regex": "cpp",
+    "__tree": "cpp",
+    "map": "cpp"
   }
 }

@@ -6,7 +6,7 @@
 /*   By: lgreau <lgreau@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 14:15:04 by lgreau            #+#    #+#             */
-/*   Updated: 2024/06/26 15:03:09 by lgreau           ###   ########.fr       */
+/*   Updated: 2024/06/27 14:05:04 by lgreau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,13 @@ class Parser {
 		const std::vector<Token>&	_tokens;
 		size_t						_pos;
 
-		const Token &						currentToken() const;
-		void								consumeToken();
-		std::unique_ptr<InstructionNode>	parseInstruction();
-		Token								parseValue();
+		InstructionNode*	parseInstruction();
+		InstructionNode*	parsePush();
+		InstructionNode*	parseAssert();
 
 	public:
 		Parser(const std::vector<Token> &tokens);
-		std::unique_ptr<ProgramNode>	parse();
+		ProgramNode *	parse();
 };
 
 #endif // PARSER_HPP
