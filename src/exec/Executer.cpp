@@ -6,7 +6,7 @@
 /*   By: lgreau <lgreau@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 11:35:35 by lgreau            #+#    #+#             */
-/*   Updated: 2024/06/27 18:25:21 by lgreau           ###   ########.fr       */
+/*   Updated: 2024/06/27 18:54:09 by lgreau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,8 @@ void	Executer::_executeInstruction(const InstructionNode& instruction) {
 			break;
 		case TokenType::EXIT:
 			this->_executeExit();
+			break;
+		case TokenType::UNKNOWN:
 			break;
 		default:
 			flushError("Unknown instruction: " + instruction.instruction.value);

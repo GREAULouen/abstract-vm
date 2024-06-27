@@ -6,7 +6,7 @@
 /*   By: lgreau <lgreau@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 16:29:11 by lgreau            #+#    #+#             */
-/*   Updated: 2024/06/27 17:39:36 by lgreau           ###   ########.fr       */
+/*   Updated: 2024/06/27 18:53:15 by lgreau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,6 @@ class VirtualMachine
 	private:
 		VirtualMachine(VirtualMachine const &);
 		VirtualMachine &	operator=(VirtualMachine const &);
-
-		// Stores all errors to be flushed
-		std::vector<std::string>	_lexical_error;
-		std::vector<std::string>	_syntactic_error;
-		std::vector<std::string>	_semantic_error;
-
-		void	_flush_static_errors(void);
-		// void	_flush_dynamic_errors(void);
 
 	public:
 		VirtualMachine();
