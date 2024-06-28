@@ -6,7 +6,7 @@
 /*   By: lgreau <lgreau@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 11:35:35 by lgreau            #+#    #+#             */
-/*   Updated: 2024/06/27 19:33:53 by lgreau           ###   ########.fr       */
+/*   Updated: 2024/06/28 10:57:51 by lgreau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,8 +190,8 @@ std::pair<eOperandType, std::string>	Executer::parseValue(const std::string& val
 	std::regex	int8_regex(R"(int8\((-?\d+)\))");
 	std::regex	int16_regex(R"(int16\((-?\d+)\))");
 	std::regex	int32_regex(R"(int32\((-?\d+)\))");
-	std::regex	float_regex(R"(float\((-?\d+\.?\d*)\))");
-	std::regex	double_regex(R"(double\((-?\d+\.?\d*)\))");
+	std::regex	float_regex(R"(float\((-?\d+\.\d*)\))");
+	std::regex	double_regex(R"(double\((-?\d+\.\d*)\))");
 
 	std::smatch	match;
 	if (std::regex_match(value, match, int8_regex)) {

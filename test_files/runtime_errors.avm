@@ -26,22 +26,22 @@ pop
 pop
 
 push int32(64)
-push float(0)
+push float(0.0)
 dump
 
 ; -- Binary Operations -- ;
 div                                    ; Division by 0 => Consume the 2 values required for the operation
 
 push int32(64)
-push float(0)
+push float(0.0)
 dump
 mod                                    ; Modulo 0
 
 
 push int32(64)
-push float(0)
+push float(0.0)
 dump
-pop                                    ; Stack has only 1 operand (int8(0))
+pop                                    ; Stack has only 1 operand (int32(64))
 print
 mul
 
@@ -49,3 +49,5 @@ mul
 ; -- Over/Under flow -- ;
 push int8(256)                         ; Any out of range value goes to 0
 push int32(-2147483649)
+
+dump

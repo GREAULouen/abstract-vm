@@ -6,7 +6,7 @@
 /*   By: lgreau <lgreau@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 16:36:52 by lgreau            #+#    #+#             */
-/*   Updated: 2024/06/27 19:12:06 by lgreau           ###   ########.fr       */
+/*   Updated: 2024/06/28 10:57:25 by lgreau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,6 @@ int	VirtualMachine::runProgram(std::string input) {
 					<< std::endl;
 		return 1;
 	}
-
-	// std::cout << "Tokenized input:" << std::endl;
-	// for (const auto &token : tokens) {
-	// 	std::cout	<< static_cast<int>(token.type)
-	// 				<< ": "
-	// 				<< token.value << std::endl;
-	// }
 
 	/*	~~~~~~~~~~~~~~~~ Syntaxic/Semantic LAYER ~~~~~~~~~~~~~~~~	*/
 
