@@ -6,13 +6,13 @@
 /*   By: lgreau <lgreau@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 14:23:38 by lgreau            #+#    #+#             */
-/*   Updated: 2024/06/27 19:17:33 by lgreau           ###   ########.fr       */
+/*   Updated: 2025/05/18 12:24:57 by lgreau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Parser.hpp"
 
-Parser::Parser(const std::vector<Token> &tokens) : _tokens(tokens), _pos(0) {}
+Parser::Parser(const std::vector<Token> &tokens) : _tokens(tokens), _pos(0), _errorsFound(false) {}
 
 ProgramNode*	Parser::parse() {
 	ProgramNode*	program = new ProgramNode();
@@ -25,12 +25,17 @@ ProgramNode*	Parser::parse() {
 		program->addInstruction(parseInstruction());
 	}
 
+	if (this->_errorsFound)
+		throw std::runtime_error("Error(s) found during parsing: not executing");
+
 	return program;
 }
 
 
 InstructionNode*	Parser::parseInstruction() {
 	Token	token = this->_tokens[this->_pos++];
+	while (token.type == TokenType::NEWLINE && this->_pos < this->_tokens.size())
+		token = this->_tokens[this->_pos++];
 
 	switch (token.type) {
 		case TokenType::PUSH:
@@ -58,8 +63,10 @@ InstructionNode*	Parser::parseInstruction() {
 		case TokenType::UNKNOWN:
 			return new InstructionNode(token);
 		case TokenType::VALUE:
-			flushError("" + token.value + " can only be pushed");
+			flushError("" + token.value + " can only be pushed or asserted");
 			return new InstructionNode(Token(TokenType::UNKNOWN, ""));
+		case TokenType::END:
+			return new InstructionNode(Token(TokenType::END, "#"));
 		default:
 			throw std::runtime_error("Unexpected token type");
 	}
@@ -88,6 +95,7 @@ InstructionNode*	Parser::parseAssert() {
 
 
 void	Parser::flushError(std::string error_msg) {
+	this->_errorsFound = true;
 	std::cerr	<< RED
 				<< "Syntactic error: "
 				<< error_msg

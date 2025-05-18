@@ -1,0 +1,23 @@
+; -------------
+; exemple.avm -
+; -------------
+
+push int32(42)         ; stack: 42
+push int32(33)         ; stack: 33 42
+
+add                    ; stack: 75
+
+push float(44.55)      ; stack: 44.55 75
+
+mul                    ; stack: 3341.25
+
+push double(42.42)     ; stack: 42.42 3341.25
+push int32(42)         ; stack: 42 42.42 3341.25
+
+dump                   ; stack: 42 42.42 3341.25
+
+pop                    ; stack: 42.42 3341.25
+
+assert double(42.42)   ; stack: 42.42 3341.25
+
+exit

@@ -6,13 +6,13 @@
 /*   By: lgreau <lgreau@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 13:47:04 by lgreau            #+#    #+#             */
-/*   Updated: 2024/06/27 19:19:06 by lgreau           ###   ########.fr       */
+/*   Updated: 2025/05/18 12:33:50 by lgreau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "Lexer.hpp"
 
-Lexer::Lexer(const std::string &input) : _input(input), _pos(0), _length(input.length()) {}
+Lexer::Lexer(const std::string &input) : _input(input), _pos(0), _length(input.length()) {} //, _errorsFound(false) {}
 
 
 std::vector<Token>	Lexer::tokenize() {
@@ -20,6 +20,9 @@ std::vector<Token>	Lexer::tokenize() {
 
 	while (this->_pos < this->_length) {
 		if (std::isspace(this->_input[this->_pos])) {
+			if (this->_input[this->_pos] == '\n')
+				tokens.push_back(Token(TokenType::NEWLINE, "\n"));
+
 			this->_pos++;
 			continue;
 		}
@@ -43,6 +46,9 @@ std::vector<Token>	Lexer::tokenize() {
 	}
 
 	tokens.push_back(Token(TokenType::END, "#"));
+
+	// if (this->_errorsFound)
+	// 	throw std::runtime_error("Error(s) found during tokenization: not parsing");
 	return tokens;
 }
 
@@ -136,6 +142,7 @@ std::string	Lexer::parseParenthesizedValue() {
 
 
 void	Lexer::flushError(std::string error_msg) {
+	// this->_errorsFound = true;
 	std::cerr	<< RED
 				<< "Lexical error: "
 				<< error_msg

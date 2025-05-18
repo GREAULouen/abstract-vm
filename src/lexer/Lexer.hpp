@@ -6,7 +6,7 @@
 /*   By: lgreau <lgreau@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 13:47:00 by lgreau            #+#    #+#             */
-/*   Updated: 2024/06/27 18:47:03 by lgreau           ###   ########.fr       */
+/*   Updated: 2025/05/18 12:33:14 by lgreau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ class Lexer {
 		std::string	_input;
 		size_t		_pos;
 		size_t		_length;
+		// bool			_errorsFound;
 
 		void		skipComment();
 		std::string	parseValue();

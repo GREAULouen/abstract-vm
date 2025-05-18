@@ -6,7 +6,7 @@
 /*   By: lgreau <lgreau@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 14:15:04 by lgreau            #+#    #+#             */
-/*   Updated: 2024/06/27 19:00:40 by lgreau           ###   ########.fr       */
+/*   Updated: 2025/05/18 12:20:47 by lgreau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ class Parser {
 
 		const std::vector<Token>&	_tokens;
 		size_t						_pos;
+		bool							_errorsFound;
 
 		InstructionNode*	parseInstruction();
 		InstructionNode*	parsePush();

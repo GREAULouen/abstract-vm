@@ -6,7 +6,7 @@
 /*   By: lgreau <lgreau@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 16:36:52 by lgreau            #+#    #+#             */
-/*   Updated: 2024/06/28 10:57:25 by lgreau           ###   ########.fr       */
+/*   Updated: 2025/05/18 12:33:34 by lgreau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	VirtualMachine::runProgram(std::string input) {
 					<< e.what()
 					<< RESET
 					<< std::endl;
-		return 1;
+		// return 1;
 	}
 
 	/*	~~~~~~~~~~~~~~~~ Syntaxic/Semantic LAYER ~~~~~~~~~~~~~~~~	*/
@@ -44,6 +44,7 @@ int	VirtualMachine::runProgram(std::string input) {
 					<< e.what()
 					<< RESET
 					<< std::endl;
+		return 1;
 	}
 
 	/*	~~~~~~~~~~~~~~~~~~~~~ Runtime LAYER ~~~~~~~~~~~~~~~~~~~~~	*/
@@ -56,6 +57,7 @@ int	VirtualMachine::runProgram(std::string input) {
 					<< e.what()
 					<< RESET
 					<< std::endl;
+		return 1;
 	}
 
 	return 0;
